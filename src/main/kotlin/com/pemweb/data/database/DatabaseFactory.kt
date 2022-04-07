@@ -2,6 +2,8 @@ package com.pemweb.data.database
 
 import com.pemweb.data.table.*
 import com.zaxxer.hikari.HikariDataSource
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -21,4 +23,9 @@ class DatabaseFactory(
 			}
 		}
 	}
+	
+	suspend fun <T> dbQuery(block: () -> T): T =
+		withContext(Dispatchers.IO) {
+			transaction { block() }
+		}
 }
