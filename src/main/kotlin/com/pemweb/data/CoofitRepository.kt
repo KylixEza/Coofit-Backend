@@ -8,6 +8,7 @@ import com.pemweb.data.table.FavoriteTable
 import com.pemweb.data.table.MenuTable
 import com.pemweb.data.table.ReviewTable
 import com.pemweb.data.table.UserTable
+import com.pemweb.model.login.LoginBody
 import com.pemweb.model.menu.MenuBody
 import com.pemweb.model.prediction.PredictionBody
 import com.pemweb.model.prediction.PredictionResponse
@@ -18,8 +19,8 @@ import java.util.*
 
 class CoofitRepository(
 	private val dbFactory: DatabaseFactory
-) {
-	suspend fun insertUser(body: UserBody) {
+): ICoofitRepository {
+	override suspend fun insertUser(body: UserBody) {
 		dbFactory.dbQuery {
 			UserTable.insert { table ->
 				table[uid] = body.uid
@@ -35,15 +36,23 @@ class CoofitRepository(
 		}
 	}
 	
-	suspend fun getDetailUser(username: String, password: String) = dbFactory.dbQuery {
+	override suspend fun isUserExist(body: LoginBody) = dbFactory.dbQuery {
 		UserTable.select {
-			UserTable.username.eq(username) and UserTable.password.eq(password)
+			UserTable.username.eq(body.username) and UserTable.password.eq(body.password)
+		}.map {
+			Mapper.mapRowToLoginResponse(it)
+		}
+	}.first()
+	
+	override suspend fun getUserDetail(uid: String) = dbFactory.dbQuery {
+		UserTable.select {
+			UserTable.uid.eq(uid)
 		}.mapNotNull {
 			Mapper.mapRowToUserResponse(it)
 		}
 	}.first()
 	
-	suspend fun updateUser(uid: String, body: UserBody) {
+	override suspend fun updateUser(uid: String, body: UserBody) {
 		dbFactory.dbQuery {
 			UserTable.update(
 				where = {UserTable.uid.eq(uid)}
@@ -58,7 +67,7 @@ class CoofitRepository(
 		}
 	}
 	
-	suspend fun addFavorite(uid: String, body: FavoriteBody) {
+	override suspend fun addFavorite(uid: String, body: FavoriteBody) {
 		dbFactory.dbQuery {
 			FavoriteTable.insert { table ->
 				table[FavoriteTable.uid] = uid
@@ -67,7 +76,7 @@ class CoofitRepository(
 		}
 	}
 	
-	suspend fun deleteFavorite(uid: String, body: FavoriteBody) {
+	override suspend fun deleteFavorite(uid: String, body: FavoriteBody) {
 		dbFactory.dbQuery {
 			FavoriteTable.deleteWhere {
 				FavoriteTable.uid.eq(uid) and FavoriteTable.menuId.eq(body.menuId)
@@ -75,7 +84,7 @@ class CoofitRepository(
 		}
 	}
 	
-	suspend fun getAllFavoritesByUser(uid: String) = dbFactory.dbQuery {
+	override suspend fun getAllFavoritesByUser(uid: String) = dbFactory.dbQuery {
 		MenuTable.join(ReviewTable, JoinType.LEFT) {
 			MenuTable.menuId.eq(ReviewTable.menuId)
 		}.join(FavoriteTable, JoinType.INNER) {
@@ -117,7 +126,7 @@ class CoofitRepository(
 			)
 	}
 	
-	suspend fun addNewMenu(body: MenuBody) {
+	override suspend fun addNewMenu(body: MenuBody) {
 		dbFactory.dbQuery {
 			MenuTable.insert { table ->
 				table[menuId] = "MENU${NanoIdUtils.randomNanoId()}"
@@ -136,58 +145,37 @@ class CoofitRepository(
 		}
 	}
 	
-	suspend fun getDietMenus() = dbFactory.dbQuery {
-		getGeneralMenu()
-			.select {
-				MenuTable.category.eq("Vegetable")
-			}
-			.groupBy(MenuTable.menuId)
-			.orderBy(MenuTable.calories, SortOrder.ASC)
-			.mapNotNull {
-			
-			}
-	}
-	
-	suspend fun getPopularMenus() = dbFactory.dbQuery {
-		getGeneralMenu()
-			.selectAll()
-			.groupBy(MenuTable.menuId)
-			.orderBy(MenuTable.ordered, SortOrder.DESC)
-			.mapNotNull {
-			
-			}
-	}
-	
-	suspend fun getExclusiveMenus() = dbFactory.dbQuery {
+	override suspend fun getSomeMenus() = dbFactory.dbQuery {
 		getGeneralMenu()
 			.selectAll()
 			.groupBy(MenuTable.menuId)
 			.mapNotNull {
+				Mapper.mapRowToMenuLiteResponse(it)
+			}
+	}.shuffled().take(20)
 	
-			}.shuffled()
-	}
 	
-	suspend fun getDetailMenu(menuId: String) = dbFactory.dbQuery {
+	override suspend fun getMenuDetail(menuId: String) = dbFactory.dbQuery {
 		getGeneralMenu().select {
 			MenuTable.menuId.eq(menuId)
 		}
 			.groupBy(MenuTable.menuId)
 			.mapNotNull {
-	
+				Mapper.mapRowToMenuResponse(it)
 			}
 	}.first()
 	
-	suspend fun searchMenu(query: String) = dbFactory.dbQuery {
+	override suspend fun searchMenu(query: String) = dbFactory.dbQuery {
 		getGeneralMenu().select {
 			LowerCase(MenuTable.title).like("%$query%".lowercase(Locale.getDefault()))
 		}
 			.groupBy(MenuTable.menuId)
 			.mapNotNull {
-			
+				Mapper.mapRowToMenuLiteResponse(it)
 			}
 	}
 	
-	suspend fun getCaloriesPrediction(body: PredictionBody): PredictionResponse {
+	override suspend fun getCaloriesPrediction(body: PredictionBody): PredictionResponse {
 		val menus = dbFactory.dbQuery {
 			MenuTable.selectAll().mapNotNull {
 				Mapper.mapRowToPredictResponse(it)

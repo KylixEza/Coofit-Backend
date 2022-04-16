@@ -1,9 +1,11 @@
 package com.pemweb.util
 
+import com.oreyo.model.menu.MenuResponse
 import com.oreyo.model.user.UserResponse
 import com.pemweb.data.table.MenuTable
 import com.pemweb.data.table.ReviewTable
 import com.pemweb.data.table.UserTable
+import com.pemweb.model.login.LoginResponse
 import com.pemweb.model.menu.MenuLiteResponse
 import com.pemweb.model.prediction.PredictionResponse
 import org.jetbrains.exposed.sql.Avg
@@ -41,6 +43,36 @@ object Mapper {
 			price = row[MenuTable.price],
 			rating = row[Avg(ReviewTable.rating, 1).alias("rating")]?.toDouble(),
 			title = row[MenuTable.title]
+		)
+	}
+	
+	fun mapRowToMenuResponse(row: ResultRow?): MenuResponse? {
+		if (row == null)
+			return null
+		
+		return MenuResponse(
+			menuId = row[MenuTable.menuId],
+			benefit = row[MenuTable.benefit],
+			description = row[MenuTable.description],
+			difficulty = row[MenuTable.difficulty],
+			calories = row[MenuTable.calories],
+			cookTime = row[MenuTable.cookTime],
+			estimatedTime = row[MenuTable.estimatedTime],
+			image = row[MenuTable.image],
+			ordered = row[MenuTable.ordered],
+			price = row[MenuTable.price],
+			rating = row[Avg(ReviewTable.rating, 1).alias("rating")]?.toDouble(),
+			title = row[MenuTable.title],
+			type = row[MenuTable.category],
+		)
+	}
+	
+	fun mapRowToLoginResponse(row: ResultRow?): LoginResponse {
+		val isExist = row?.get(UserTable.uid) != null
+		
+		return LoginResponse(
+			isExist = isExist,
+			uid =  if (isExist) row?.get(UserTable.uid) else null
 		)
 	}
 	

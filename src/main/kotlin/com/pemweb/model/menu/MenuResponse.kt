@@ -43,7 +43,4 @@ data class MenuResponse(
 	
 	@field:SerializedName("type")
 	val type: String,
-	
-	@field:SerializedName("video_url")
-	val videoUrl: String
 )

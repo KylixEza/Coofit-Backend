@@ -1,6 +1,7 @@
 package com.pemweb.di
 
 import com.pemweb.data.CoofitRepository
+import com.pemweb.data.ICoofitRepository
 import com.pemweb.data.database.DatabaseFactory
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
@@ -34,7 +35,7 @@ val databaseModule = module {
 }
 
 val repositoryModule = module {
-	single {
+	single<ICoofitRepository> {
 		CoofitRepository(get())
 	}
 }
