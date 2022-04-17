@@ -14,8 +14,8 @@ class UserController(
 	override suspend fun ApplicationCall.addNewUser(body: UserBody) {
 		body.apply {
 			try {
-				if (coofitRepository.isUserExist(username, password).isEmpty()) {
-					this@addNewUser.generalSuccess("${body.name} successfully added") {
+				if (!coofitRepository.isUserExist(username, password)) {
+					this@addNewUser.generalSuccess("${body.username} successfully added") {
 						coofitRepository.addNewUser(body)
 					}
 				} else {
@@ -31,7 +31,7 @@ class UserController(
 		this.generalSuccess { coofitRepository.getUserDetail(uid) }
 	
 	override suspend fun ApplicationCall.updateUser(uid: String, body: UserBody) =
-		this.generalSuccess("${body.name} successfully updated") {
+		this.generalSuccess("${body.username} successfully updated") {
 			coofitRepository.updateUser(uid, body)
 		}
 	

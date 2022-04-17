@@ -37,11 +37,13 @@ class CoofitRepository(
 	}
 	
 	override suspend fun isUserExist(username: String, password: String) = dbFactory.dbQuery {
-		UserTable.select {
+		val users = UserTable.select {
 			UserTable.username.eq(username) and UserTable.password.eq(password)
 		}.map {
 			Mapper.mapRowToLoginResponse(it)
 		}
+		
+		return@dbQuery users.isNotEmpty()
 	}
 	
 	override suspend fun getUserDetail(uid: String) = dbFactory.dbQuery {

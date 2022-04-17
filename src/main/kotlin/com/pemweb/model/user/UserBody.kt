@@ -24,9 +24,6 @@ data class UserBody(
 	@field:SerializedName("email")
 	val email: String,
 	
-	@field:SerializedName("name")
-	val name: String,
-	
 	@field:SerializedName("phone_number")
 	val phoneNumber: String,
 	

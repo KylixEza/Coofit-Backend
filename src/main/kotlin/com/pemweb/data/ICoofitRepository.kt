@@ -12,7 +12,7 @@ import com.pemweb.model.user.UserBody
 
 interface ICoofitRepository {
 	suspend fun addNewUser(body: UserBody)
-	suspend fun isUserExist(username: String, password: String): List<LoginResponse>
+	suspend fun isUserExist(username: String, password: String): Boolean
 	suspend fun getUserDetail(uid: String): UserResponse
 	suspend fun updateUser(uid: String, body: UserBody)
 	suspend fun addFavorite(uid: String, body: FavoriteBody)
