@@ -3,7 +3,7 @@ package com.pemweb.controller
 import com.oreyo.model.favorite.FavoriteBody
 import com.pemweb.helper.ResponseModelHelper.generalSuccess
 import com.pemweb.data.ICoofitRepository
-import com.pemweb.model.login.LoginBody
+import com.pemweb.helper.ResponseModelHelper.generalException
 import com.pemweb.model.user.UserBody
 import io.ktor.application.*
 
@@ -11,13 +11,21 @@ class UserController(
 	private val coofitRepository: ICoofitRepository
 ): IUserController {
 	
-	override suspend fun ApplicationCall.insertUser(body: UserBody) =
-		this.generalSuccess("${body.name} successfully added") {
-			coofitRepository.addNewUser(body)
+	override suspend fun ApplicationCall.addNewUser(body: UserBody) {
+		body.apply {
+			try {
+				if (coofitRepository.isUserExist(username, password).isEmpty()) {
+					this@addNewUser.generalSuccess("${body.name} successfully added") {
+						coofitRepository.addNewUser(body)
+					}
+				} else {
+					throw Exception("User already exist!")
+				}
+			} catch (e: Exception) {
+				this@addNewUser.generalException(e)
+			}
 		}
-	
-	override suspend fun ApplicationCall.isUserExist(body: LoginBody) =
-		this.generalSuccess { coofitRepository.isUserExist(body) }
+	}
 	
 	override suspend fun ApplicationCall.getUserDetail(uid: String) =
 		this.generalSuccess { coofitRepository.getUserDetail(uid) }

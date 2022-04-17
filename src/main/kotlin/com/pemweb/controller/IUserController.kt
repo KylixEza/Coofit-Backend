@@ -6,8 +6,7 @@ import com.pemweb.model.user.UserBody
 import io.ktor.application.*
 
 interface IUserController {
-	suspend fun ApplicationCall.insertUser(body: UserBody)
-	suspend fun ApplicationCall.isUserExist(body: LoginBody)
+	suspend fun ApplicationCall.addNewUser(body: UserBody)
 	suspend fun ApplicationCall.getUserDetail(uid: String)
 	suspend fun ApplicationCall.updateUser(uid: String, body: UserBody)
 	suspend fun ApplicationCall.addFavorite(uid: String, body: FavoriteBody)

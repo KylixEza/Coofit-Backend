@@ -10,8 +10,6 @@ sealed class UserRouteLocation {
 		//POST
 		const val POST_USER = BASE_USER
 		//GET
-		const val GET_IS_USER_EXIST = BASE_USER
-		//GET
 		const val GET_USER_DETAIL = BASE_SELECTED_USER
 		//PUT
 		const val UPDATE_USER = BASE_SELECTED_USER
@@ -25,9 +23,6 @@ sealed class UserRouteLocation {
 	
 	@Location(POST_USER)
 	class UserPostRoute
-	
-	@Location(GET_IS_USER_EXIST)
-	class UserIsExistGetRoute
 	
 	@Location(GET_USER_DETAIL)
 	data class UserDetailGetRoute(val uid: String)

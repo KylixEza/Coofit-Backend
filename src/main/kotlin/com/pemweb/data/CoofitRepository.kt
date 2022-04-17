@@ -36,13 +36,13 @@ class CoofitRepository(
 		}
 	}
 	
-	override suspend fun isUserExist(body: LoginBody) = dbFactory.dbQuery {
+	override suspend fun isUserExist(username: String, password: String) = dbFactory.dbQuery {
 		UserTable.select {
-			UserTable.username.eq(body.username) and UserTable.password.eq(body.password)
+			UserTable.username.eq(username) and UserTable.password.eq(password)
 		}.map {
 			Mapper.mapRowToLoginResponse(it)
 		}
-	}.first()
+	}
 	
 	override suspend fun getUserDetail(uid: String) = dbFactory.dbQuery {
 		UserTable.select {

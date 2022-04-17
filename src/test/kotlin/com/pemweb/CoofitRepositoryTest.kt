@@ -16,9 +16,11 @@ import org.koin.test.KoinTest
 import org.koin.test.KoinTestRule
 import org.koin.test.mock.MockProviderRule
 import org.koin.test.mock.declareMock
+import org.mockito.BDDMockito.`when`
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito
 import org.mockito.Mockito.verify
+import kotlin.test.assertEquals
 
 @RunWith(JUnit4::class)
 class CoofitRepositoryTest: KoinTest {
@@ -51,8 +53,11 @@ class CoofitRepositoryTest: KoinTest {
 		val service = declareMock<ICoofitRepository> {
 			launch(Dispatchers.IO) {
 				given(addNewUser(dummyUser)).willReturn(Unit)
+				`when`(addNewUser(dummyUser)).thenReturn(Unit)
 			}
 		}
+		
+		service.addNewUser(dummyUser)
 		verify(service).addNewUser(dummyUser)
 	}
 	

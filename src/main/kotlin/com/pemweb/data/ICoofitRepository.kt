@@ -3,7 +3,6 @@ package com.pemweb.data
 import com.oreyo.model.favorite.FavoriteBody
 import com.oreyo.model.menu.MenuResponse
 import com.oreyo.model.user.UserResponse
-import com.pemweb.model.login.LoginBody
 import com.pemweb.model.login.LoginResponse
 import com.pemweb.model.menu.MenuBody
 import com.pemweb.model.menu.MenuLiteResponse
@@ -13,7 +12,7 @@ import com.pemweb.model.user.UserBody
 
 interface ICoofitRepository {
 	suspend fun addNewUser(body: UserBody)
-	suspend fun isUserExist(body: LoginBody): LoginResponse
+	suspend fun isUserExist(username: String, password: String): List<LoginResponse>
 	suspend fun getUserDetail(uid: String): UserResponse
 	suspend fun updateUser(uid: String, body: UserBody)
 	suspend fun addFavorite(uid: String, body: FavoriteBody)

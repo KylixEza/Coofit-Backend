@@ -1,6 +1,7 @@
 package com.pemweb.app
 
 import com.pemweb.route.menu.MenuRoute
+import com.pemweb.route.user.UserRoute
 import io.ktor.routing.*
 import io.ktor.http.*
 import io.ktor.application.*
@@ -13,11 +14,13 @@ import org.koin.ktor.ext.inject
 fun Application.configureRouting() {
 	
 	val menuRoute by inject<MenuRoute>()
+	val userRoute by inject<UserRoute>()
 	
 	routing {
 		get("/") {
 			call.respondText("Hello World!")
 		}
 		menuRoute.apply { initRoute() }
+		userRoute.apply { initRoute() }
 	}
 }
