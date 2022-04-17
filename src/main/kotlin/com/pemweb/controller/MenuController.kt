@@ -9,6 +9,7 @@ import io.ktor.application.*
 class MenuController(
 	private val coofitRepository: ICoofitRepository
 ): IMenuController {
+	
 	override suspend fun ApplicationCall.addNewMenu(body: MenuBody) =
 		this.generalSuccess("${body.title} successfully added") {
 			coofitRepository.addNewMenu(body)

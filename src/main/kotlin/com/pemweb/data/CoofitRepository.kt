@@ -20,7 +20,7 @@ import java.util.*
 class CoofitRepository(
 	private val dbFactory: DatabaseFactory
 ): ICoofitRepository {
-	override suspend fun insertUser(body: UserBody) {
+	override suspend fun addNewUser(body: UserBody) {
 		dbFactory.dbQuery {
 			UserTable.insert { table ->
 				table[uid] = body.uid

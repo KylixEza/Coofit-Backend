@@ -12,7 +12,7 @@ import com.pemweb.model.prediction.PredictionResponse
 import com.pemweb.model.user.UserBody
 
 interface ICoofitRepository {
-	suspend fun insertUser(body: UserBody)
+	suspend fun addNewUser(body: UserBody)
 	suspend fun isUserExist(body: LoginBody): LoginResponse
 	suspend fun getUserDetail(uid: String): UserResponse
 	suspend fun updateUser(uid: String, body: UserBody)

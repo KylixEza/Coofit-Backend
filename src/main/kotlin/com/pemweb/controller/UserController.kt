@@ -13,7 +13,7 @@ class UserController(
 	
 	override suspend fun ApplicationCall.insertUser(body: UserBody) =
 		this.generalSuccess("${body.name} successfully added") {
-			coofitRepository.insertUser(body)
+			coofitRepository.addNewUser(body)
 		}
 	
 	override suspend fun ApplicationCall.isUserExist(body: LoginBody) =

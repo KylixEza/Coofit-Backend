@@ -1,11 +1,10 @@
-package com.pemweb
+package com.pemweb.app
 
 import com.pemweb.di.controllerModule
 import com.pemweb.di.databaseModule
 import com.pemweb.di.repositoryModule
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
-import com.pemweb.plugins.*
 import io.ktor.application.*
 import org.koin.core.logger.Level
 import org.koin.ktor.ext.Koin

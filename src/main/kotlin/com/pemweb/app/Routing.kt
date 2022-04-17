@@ -1,4 +1,4 @@
-package com.pemweb.plugins
+package com.pemweb.app
 
 import io.ktor.routing.*
 import io.ktor.http.*

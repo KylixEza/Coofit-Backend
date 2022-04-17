@@ -1,26 +1,46 @@
 package com.pemweb.route.user
 
+import com.pemweb.route.BASE_SELECTED_USER
+import com.pemweb.route.BASE_USER
+import io.ktor.locations.*
+
+@KtorExperimentalLocationsAPI
 sealed class UserRouteLocation {
 	companion object {
-		const val BASE_USER = "/user"
-		const val SELECTED_USER = "$BASE_USER/{uid}"
-		const val BASE_MENU = "/menu"
-		const val SELECTED_MENU = "/menu/{menuId}"
 		//POST
 		const val POST_USER = BASE_USER
 		//GET
 		const val GET_IS_USER_EXIST = BASE_USER
 		//GET
-		const val GET_DETAIL_USER = SELECTED_USER
-		//UPDATE
-		const val UPDATE_USER = SELECTED_USER
+		const val GET_USER_DETAIL = BASE_SELECTED_USER
+		//PUT
+		const val UPDATE_USER = BASE_SELECTED_USER
 		//POST
-		const val POST_FAVORITE = "$SELECTED_USER/favorite"
+		const val POST_FAVORITE = "$BASE_SELECTED_USER/favorite"
 		//DELETE
-		const val DELETE_FAVORITE = "$SELECTED_USER/favorite"
+		const val DELETE_FAVORITE = "$BASE_SELECTED_USER/favorite"
 		//GET
-		const val GET_FAVORITE = "$SELECTED_USER/favorite"
-		//POST
-		const val POST_MENU = BASE_MENU
+		const val GET_FAVORITE = "$BASE_SELECTED_USER/favorite"
 	}
+	
+	@Location(POST_USER)
+	class UserPostRoute
+	
+	@Location(GET_IS_USER_EXIST)
+	class UserIsExistGetRoute
+	
+	@Location(GET_USER_DETAIL)
+	data class UserDetailGetRoute(val uid: String)
+	
+	@Location(UPDATE_USER)
+	data class UserUpdatePutRoute(val uid: String)
+	
+	@Location(POST_FAVORITE)
+	data class UserFavoritePostRoute(val uid: String)
+	
+	@Location(DELETE_FAVORITE)
+	data class UserFavoriteDeleteRoute(val uid: String)
+	
+	@Location(GET_FAVORITE)
+	data class UserFavoriteGetRoute(val uid: String)
 }
