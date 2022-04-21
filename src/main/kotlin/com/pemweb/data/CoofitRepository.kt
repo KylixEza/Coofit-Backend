@@ -13,19 +13,23 @@ import com.pemweb.model.menu.MenuBody
 import com.pemweb.model.prediction.PredictionBody
 import com.pemweb.model.prediction.PredictionResponse
 import com.pemweb.util.Mapper
+import io.ktor.http.*
+import io.ktor.util.*
 import org.jetbrains.exposed.sql.*
 import org.nield.kotlinstatistics.toNaiveBayesClassifier
 import java.util.*
 
+@InternalAPI
 class CoofitRepository(
 	private val dbFactory: DatabaseFactory
 ): ICoofitRepository {
+	
 	override suspend fun addNewUser(body: UserBody) {
 		dbFactory.dbQuery {
 			UserTable.insert { table ->
-				table[uid] = body.uid
+				table[uid] = "USER${NanoIdUtils.randomNanoId()}"
 				table[username] = body.username
-				table[password] = body.password
+				table[password] = body.password.encodeBase64()
 				table[address] = body.address
 				table[avatar] = body.avatar
 				table[coofitWallet] = 0
@@ -38,12 +42,12 @@ class CoofitRepository(
 	
 	override suspend fun isUserExist(username: String, password: String) = dbFactory.dbQuery {
 		val users = UserTable.select {
-			UserTable.username.eq(username) and UserTable.password.eq(password)
+			UserTable.username.eq(username) and UserTable.password.eq(password.decodeBase64String())
 		}.map {
 			Mapper.mapRowToLoginResponse(it)
 		}
 		
-		return@dbQuery users.isNotEmpty()
+		return@dbQuery users.isEmpty()
 	}
 	
 	override suspend fun getUserDetail(uid: String) = dbFactory.dbQuery {
@@ -69,19 +73,19 @@ class CoofitRepository(
 		}
 	}
 	
-	override suspend fun addFavorite(uid: String, body: FavoriteBody) {
+	override suspend fun addFavorite(uid: String, menuId: String) {
 		dbFactory.dbQuery {
 			FavoriteTable.insert { table ->
 				table[FavoriteTable.uid] = uid
-				table[menuId] = body.menuId
+				table[FavoriteTable.menuId] = menuId
 			}
 		}
 	}
 	
-	override suspend fun deleteFavorite(uid: String, body: FavoriteBody) {
+	override suspend fun deleteFavorite(uid: String, menuId: String) {
 		dbFactory.dbQuery {
 			FavoriteTable.deleteWhere {
-				FavoriteTable.uid.eq(uid) and FavoriteTable.menuId.eq(body.menuId)
+				FavoriteTable.uid.eq(uid) and FavoriteTable.menuId.eq(menuId)
 			}
 		}
 	}

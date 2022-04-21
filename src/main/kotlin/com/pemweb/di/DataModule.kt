@@ -5,6 +5,7 @@ import com.pemweb.data.ICoofitRepository
 import com.pemweb.data.database.DatabaseFactory
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
+import io.ktor.util.*
 import org.koin.dsl.module
 
 val databaseModule = module {
@@ -12,7 +13,7 @@ val databaseModule = module {
 		DatabaseFactory(get())
 	}
 	
-	factory {
+	single {
 		val config = HikariConfig()
 		config.apply {
 			driverClassName = System.getenv("JDBC_DRIVER")
@@ -26,14 +27,13 @@ val databaseModule = module {
 			val password = uri.userInfo.split(":").toTypedArray()[1]
 			jdbcUrl =
 				"jdbc:postgresql://" + uri.host + ":" + uri.port + uri.path + "?sslmode=require" + "&user=$username&password=$password"*/
-			
 			validate()
-			
 		}
 		HikariDataSource(config)
 	}
 }
 
+@InternalAPI
 val repositoryModule = module {
 	single<ICoofitRepository> {
 		CoofitRepository(get())

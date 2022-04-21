@@ -8,10 +8,12 @@ import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import io.ktor.application.*
 import io.ktor.locations.*
+import io.ktor.util.*
 import org.koin.core.logger.Level
 import org.koin.ktor.ext.Koin
 import org.koin.logger.slf4jLogger
 
+@InternalAPI
 @KtorExperimentalLocationsAPI
 fun main() {
 	embeddedServer(Netty, port = 8080, host = "localhost") {
@@ -19,6 +21,7 @@ fun main() {
 			slf4jLogger(Level.ERROR)
 			modules(listOf(databaseModule, repositoryModule, controllerModule, routeModule))
 		}
+		install(Locations)
 		configureRouting()
 		configureSerialization()
 	}.start(wait = true)

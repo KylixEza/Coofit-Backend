@@ -31,10 +31,10 @@ sealed class UserRouteLocation {
 	data class UserUpdatePutRoute(val uid: String)
 	
 	@Location(POST_FAVORITE)
-	data class UserFavoritePostRoute(val uid: String)
+	data class UserFavoritePostRoute(val uid: String, val menuId: String)
 	
 	@Location(DELETE_FAVORITE)
-	data class UserFavoriteDeleteRoute(val uid: String)
+	data class UserFavoriteDeleteRoute(val uid: String, val menuId: String)
 	
 	@Location(GET_FAVORITE)
 	data class UserFavoriteGetRoute(val uid: String)

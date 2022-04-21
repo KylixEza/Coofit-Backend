@@ -7,10 +7,10 @@ import com.pemweb.controller.UserController
 import org.koin.dsl.module
 
 val controllerModule = module {
-	factory<IUserController> {
+	single<IUserController> {
 		UserController(get())
 	}
-	factory<IMenuController> {
+	single<IMenuController> {
 		MenuController(get())
 	}
 }

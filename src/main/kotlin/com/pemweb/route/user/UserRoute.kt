@@ -1,6 +1,5 @@
 package com.pemweb.route.user
 
-import com.oreyo.model.favorite.FavoriteBody
 import com.pemweb.controller.IUserController
 import com.pemweb.helper.ResponseModelHelper.generalException
 import com.pemweb.model.user.UserBody
@@ -70,14 +69,14 @@ class UserRoute(
 				return@post
 			} ?: ""
 			
-			val body = try {
-				call.receive<FavoriteBody>()
+			val menuId = try {
+				call.parameters["menuId"]
 			} catch (e: Exception) {
 				call.generalException(e)
 				return@post
-			}
+			} ?: ""
 			
-			controller.apply { call.addFavorite(uid, body) }
+			controller.apply { call.addFavorite(uid, menuId) }
 		}
 	}
 	
@@ -90,14 +89,14 @@ class UserRoute(
 				return@delete
 			} ?: ""
 			
-			val body = try {
-				call.receive<FavoriteBody>()
+			val menuId = try {
+				call.parameters["menuId"]
 			} catch (e: Exception) {
 				call.generalException(e)
 				return@delete
-			}
+			} ?: ""
 			
-			controller.apply { call.deleteFavorite(uid, body) }
+			controller.apply { call.deleteFavorite(uid, menuId) }
 		}
 	}
 	
