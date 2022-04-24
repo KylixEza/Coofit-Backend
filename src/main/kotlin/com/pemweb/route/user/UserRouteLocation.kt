@@ -10,19 +10,24 @@ sealed class UserRouteLocation {
 		//POST
 		const val POST_USER = BASE_USER
 		//GET
+		const val GET_USER_ID = "$BASE_USER/login"
+		//GET
 		const val GET_USER_DETAIL = BASE_SELECTED_USER
 		//PUT
 		const val UPDATE_USER = BASE_SELECTED_USER
 		//POST
-		const val POST_FAVORITE = "$BASE_SELECTED_USER/favorite"
+		const val POST_FAVORITE = "$BASE_SELECTED_USER/favorite/{menuId}"
 		//DELETE
-		const val DELETE_FAVORITE = "$BASE_SELECTED_USER/favorite"
+		const val DELETE_FAVORITE = "$BASE_SELECTED_USER/favorite/{menuId}"
 		//GET
 		const val GET_FAVORITE = "$BASE_SELECTED_USER/favorite"
 	}
 	
 	@Location(POST_USER)
 	class UserPostRoute
+	
+	@Location(GET_USER_ID)
+	class UserIdGetRoute
 	
 	@Location(GET_USER_DETAIL)
 	data class UserDetailGetRoute(val uid: String)

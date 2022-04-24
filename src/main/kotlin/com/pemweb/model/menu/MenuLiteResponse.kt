@@ -18,9 +18,6 @@ data class MenuLiteResponse(
 	@field:SerializedName("image")
 	val image: String,
 	
-	@field:SerializedName("price")
-	val price: Int,
-	
 	@field:SerializedName("rating")
 	val rating: Double? = 0.0,
 	

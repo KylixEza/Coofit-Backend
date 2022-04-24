@@ -2,6 +2,7 @@ package com.pemweb.route.user
 
 import com.pemweb.controller.IUserController
 import com.pemweb.helper.ResponseModelHelper.generalException
+import com.pemweb.model.login.LoginBody
 import com.pemweb.model.user.UserBody
 import io.ktor.application.*
 import io.ktor.routing.*
@@ -24,6 +25,19 @@ class UserRoute(
 				return@post
 			}
 			controller.apply { call.addNewUser(body) }
+		}
+	}
+	
+	private fun Route.getIdOfUser() {
+		get<UserRouteLocation.UserIdGetRoute> {
+			val body = try {
+				call.receive<LoginBody>()
+			} catch (e: Exception) {
+				call.generalException(e)
+				return@get
+			}
+			
+			controller.apply { call.getIdOfUser(body) }
 		}
 	}
 	
@@ -117,6 +131,7 @@ class UserRoute(
 	fun Route.initRoute() {
 		this.apply {
 			postUser()
+			getIdOfUser()
 			getUserDetail()
 			updateUser()
 			postFavoriteUser()

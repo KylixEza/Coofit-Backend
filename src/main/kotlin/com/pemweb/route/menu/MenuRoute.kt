@@ -1,7 +1,11 @@
 package com.pemweb.route.menu
 
+import com.oreyo.model.ingredient.IngredientBody
+import com.oreyo.model.review.ReviewBody
+import com.oreyo.model.step.StepBody
 import com.pemweb.controller.IMenuController
 import com.pemweb.helper.ResponseModelHelper.generalException
+import com.pemweb.helper.ResponseModelHelper.generalListSuccess
 import com.pemweb.model.menu.MenuBody
 import com.pemweb.model.prediction.PredictionBody
 import io.ktor.application.*
@@ -27,9 +31,85 @@ class MenuRoute(
 		}
 	}
 	
+	private fun Route.postIngredient() {
+		post<MenuRouteLocation.MenuPostIngredientRoute> {
+			
+			val menuId = try {
+				call.parameters["menuId"]
+			} catch (e: Exception) {
+				call.generalException(e)
+				return@post
+			} ?: ""
+			
+			val body = try {
+				call.receive<IngredientBody>()
+			} catch (e: Exception) {
+				call.generalException(e)
+				return@post
+			}
+			controller.apply { call.addNewIngredient(menuId, body) }
+		}
+	}
+	
+	private fun Route.postStep() {
+		post<MenuRouteLocation.MenuPostStepRoute> {
+			
+			val menuId = try {
+				call.parameters["menuId"]
+			} catch (e: Exception) {
+				call.generalException(e)
+				return@post
+			} ?: ""
+			
+			val body = try {
+				call.receive<StepBody>()
+			} catch (e: Exception) {
+				call.generalException(e)
+				return@post
+			}
+			controller.apply { call.addNewStep(menuId, body) }
+		}
+	}
+	
+	private fun Route.postReview() {
+		post<MenuRouteLocation.MenuPostReviewRoute> {
+			
+			val menuId = try {
+				call.parameters["menuId"]
+			} catch (e: Exception) {
+				call.generalException(e)
+				return@post
+			} ?: ""
+			
+			val body = try {
+				call.receive<ReviewBody>()
+			} catch (e: Exception) {
+				call.generalException(e)
+				return@post
+			}
+			controller.apply { call.addNewReview(menuId, body) }
+		}
+	}
+	
 	private fun Route.getTopMenu() {
 		get<MenuRouteLocation.MenuTopGetRoute> {
 			controller.apply { call.getSomeMenus() }
+		}
+	}
+	
+	private fun Route.getAllMenus() {
+		get<MenuRouteLocation.MenuAllGetRoute> {
+			val query = try {
+				call.request.queryParameters["query"]
+			} catch (e: Exception) {
+				call.generalException(e)
+				return@get
+			}
+			
+			if (query != null)
+				controller.apply { call.searchMenu(query) }
+			else
+				controller.apply { call.getAllMenus() }
 		}
 	}
 	
@@ -61,7 +141,11 @@ class MenuRoute(
 	fun Route.initRoute() {
 		this.apply {
 			postMenu()
+			postIngredient()
+			postReview()
+			postStep()
 			getTopMenu()
+			getAllMenus()
 			getMenuDetail()
 			getMenuCaloriesPrediction()
 		}

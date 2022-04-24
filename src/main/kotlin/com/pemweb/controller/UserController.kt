@@ -1,9 +1,9 @@
 package com.pemweb.controller
 
-import com.oreyo.model.favorite.FavoriteBody
 import com.pemweb.helper.ResponseModelHelper.generalSuccess
 import com.pemweb.data.ICoofitRepository
 import com.pemweb.helper.ResponseModelHelper.generalException
+import com.pemweb.model.login.LoginBody
 import com.pemweb.model.user.UserBody
 import io.ktor.application.*
 
@@ -26,6 +26,9 @@ class UserController(
 			}
 		}
 	}
+	
+	override suspend fun ApplicationCall.getIdOfUser(body: LoginBody) =
+		this.generalSuccess { coofitRepository.getIdOfUser(body.username, body.password) }
 	
 	override suspend fun ApplicationCall.getUserDetail(uid: String) =
 		this.generalSuccess { coofitRepository.getUserDetail(uid) }

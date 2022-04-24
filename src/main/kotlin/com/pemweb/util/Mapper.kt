@@ -1,10 +1,11 @@
 package com.pemweb.util
 
-import com.oreyo.model.menu.MenuResponse
+import com.oreyo.model.ingredient.IngredientResponse
+import com.pemweb.model.menu.MenuResponse
+import com.oreyo.model.review.ReviewResponse
+import com.oreyo.model.step.StepResponse
 import com.oreyo.model.user.UserResponse
-import com.pemweb.data.table.MenuTable
-import com.pemweb.data.table.ReviewTable
-import com.pemweb.data.table.UserTable
+import com.pemweb.data.table.*
 import com.pemweb.model.login.LoginResponse
 import com.pemweb.model.menu.MenuLiteResponse
 import com.pemweb.model.prediction.PredictionResponse
@@ -40,30 +41,64 @@ object Mapper {
 			calories = row[MenuTable.calories],
 			cookTime = row[MenuTable.cookTime],
 			image = row[MenuTable.image],
-			price = row[MenuTable.price],
 			rating = row[Avg(ReviewTable.rating, 1).alias("rating")]?.toDouble(),
 			title = row[MenuTable.title]
 		)
 	}
 	
-	fun mapRowToMenuResponse(row: ResultRow?): MenuResponse? {
+	fun mapRowToMenuResponse(
+		row: ResultRow?,
+		ingredients: List<String>,
+		steps: List<String>,
+		reviews: List<ReviewResponse>
+	): MenuResponse? {
 		if (row == null)
 			return null
 		
 		return MenuResponse(
 			menuId = row[MenuTable.menuId],
-			benefit = row[MenuTable.benefit],
 			description = row[MenuTable.description],
 			difficulty = row[MenuTable.difficulty],
 			calories = row[MenuTable.calories],
 			cookTime = row[MenuTable.cookTime],
-			estimatedTime = row[MenuTable.estimatedTime],
 			image = row[MenuTable.image],
-			ordered = row[MenuTable.ordered],
-			price = row[MenuTable.price],
-			rating = row[Avg(ReviewTable.rating, 1).alias("rating")]?.toDouble(),
+			ingredients = ingredients,
+			rating = row[Avg(ReviewTable.rating, 1).alias("rating")]?.toDouble() ?: 0.0,
+			reviews = reviews,
+			steps = steps,
 			title = row[MenuTable.title],
-			type = row[MenuTable.category],
+		)
+	}
+	
+	fun mapRowToIngredientResponse(row: ResultRow?): IngredientResponse? {
+		if (row == null)
+			return null
+		
+		return IngredientResponse(
+			menuId = row[IngredientTable.menuId],
+			ingredient = row[IngredientTable.ingredient]
+		)
+	}
+	
+	fun mapRowToStepResponse(row: ResultRow?): StepResponse? {
+		if (row == null)
+			return null
+		
+		return StepResponse(
+			menuId = row[StepTable.menuId],
+			step = row[StepTable.step]
+		)
+	}
+	
+	fun mapRowToReviewResponse(row: ResultRow?): ReviewResponse? {
+		if (row == null)
+			return null
+		
+		return ReviewResponse(
+			menuId = row[ReviewTable.menuId],
+			name = row[UserTable.username],
+			avatar = row[UserTable.avatar],
+			rating = row[ReviewTable.rating],
 		)
 	}
 	

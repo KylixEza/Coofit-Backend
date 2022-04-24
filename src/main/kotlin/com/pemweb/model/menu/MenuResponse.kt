@@ -1,15 +1,16 @@
-package com.oreyo.model.menu
+package com.pemweb.model.menu
 
 import com.google.gson.annotations.SerializedName
+import com.oreyo.model.ingredient.IngredientResponse
+import com.oreyo.model.review.ReviewRequest
+import com.oreyo.model.review.ReviewResponse
+import com.oreyo.model.step.StepResponse
 import java.math.BigDecimal
 
 data class MenuResponse(
 	
 	@field:SerializedName("menu_id")
 	val menuId: String,
-	
-	@field:SerializedName("benefit")
-	val benefit: String,
 	
 	@field:SerializedName("description")
 	val description: String,
@@ -23,24 +24,21 @@ data class MenuResponse(
 	@field:SerializedName("cook_time")
 	val cookTime: Int,
 	
-	@field:SerializedName("estimated_time")
-	val estimatedTime: String,
-	
 	@field:SerializedName("image")
 	val image: String,
 	
-	@field:SerializedName("ordered")
-	val ordered: Int,
-	
-	@field:SerializedName("price")
-	val price: Int,
+	@field:SerializedName("ingredients")
+	val ingredients: List<String>,
 	
 	@field:SerializedName("rating")
 	val rating: Double?,
 	
+	@field:SerializedName("reviews")
+	val reviews: List<ReviewResponse>,
+	
+	@field:SerializedName("steps")
+	val steps: List<String>,
+	
 	@field:SerializedName("title")
 	val title: String,
-	
-	@field:SerializedName("type")
-	val type: String,
 )
