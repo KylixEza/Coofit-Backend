@@ -2,6 +2,7 @@ package com.pemweb.route.user
 
 import com.pemweb.controller.IUserController
 import com.pemweb.helper.ResponseModelHelper.generalException
+import com.pemweb.model.favorite.FavoriteBody
 import com.pemweb.model.login.LoginBody
 import com.pemweb.model.user.UserBody
 import io.ktor.application.*
@@ -83,14 +84,14 @@ class UserRoute(
 				return@post
 			} ?: ""
 			
-			val menuId = try {
-				call.parameters["menuId"]
+			val body = try {
+				call.receive<FavoriteBody>()
 			} catch (e: Exception) {
 				call.generalException(e)
 				return@post
-			} ?: ""
+			}
 			
-			controller.apply { call.addFavorite(uid, menuId) }
+			controller.apply { call.addFavorite(uid, body) }
 		}
 	}
 	
@@ -103,14 +104,14 @@ class UserRoute(
 				return@delete
 			} ?: ""
 			
-			val menuId = try {
-				call.parameters["menuId"]
+			val body = try {
+				call.receive<FavoriteBody>()
 			} catch (e: Exception) {
 				call.generalException(e)
 				return@delete
-			} ?: ""
+			}
 			
-			controller.apply { call.deleteFavorite(uid, menuId) }
+			controller.apply { call.deleteFavorite(uid, body) }
 		}
 	}
 	

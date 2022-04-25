@@ -3,6 +3,7 @@ package com.pemweb.controller
 import com.pemweb.helper.ResponseModelHelper.generalSuccess
 import com.pemweb.data.ICoofitRepository
 import com.pemweb.helper.ResponseModelHelper.generalException
+import com.pemweb.model.favorite.FavoriteBody
 import com.pemweb.model.login.LoginBody
 import com.pemweb.model.user.UserBody
 import io.ktor.application.*
@@ -38,14 +39,14 @@ class UserController(
 			coofitRepository.updateUser(uid, body)
 		}
 	
-	override suspend fun ApplicationCall.addFavorite(uid: String, menuId: String) =
+	override suspend fun ApplicationCall.addFavorite(uid: String, body: FavoriteBody) =
 		this.generalSuccess("Favorite successfully added") {
-			coofitRepository.addFavorite(uid, menuId)
+			coofitRepository.addFavorite(uid, body.menuId)
 		}
 	
-	override suspend fun ApplicationCall.deleteFavorite(uid: String, menuId: String) =
+	override suspend fun ApplicationCall.deleteFavorite(uid: String, body: FavoriteBody) =
 		this.generalSuccess("Favorite successfully deleted") {
-			coofitRepository.deleteFavorite(uid, menuId)
+			coofitRepository.deleteFavorite(uid, body.menuId)
 		}
 	
 	override suspend fun ApplicationCall.getAllFavoritesByUser(uid: String) =

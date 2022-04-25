@@ -16,9 +16,9 @@ sealed class UserRouteLocation {
 		//PUT
 		const val UPDATE_USER = BASE_SELECTED_USER
 		//POST
-		const val POST_FAVORITE = "$BASE_SELECTED_USER/favorite/{menuId}"
+		const val POST_FAVORITE = "$BASE_SELECTED_USER/favorite"
 		//DELETE
-		const val DELETE_FAVORITE = "$BASE_SELECTED_USER/favorite/{menuId}"
+		const val DELETE_FAVORITE = "$BASE_SELECTED_USER/favorite"
 		//GET
 		const val GET_FAVORITE = "$BASE_SELECTED_USER/favorite"
 	}
@@ -36,10 +36,10 @@ sealed class UserRouteLocation {
 	data class UserUpdatePutRoute(val uid: String)
 	
 	@Location(POST_FAVORITE)
-	data class UserFavoritePostRoute(val uid: String, val menuId: String)
+	data class UserFavoritePostRoute(val uid: String)
 	
 	@Location(DELETE_FAVORITE)
-	data class UserFavoriteDeleteRoute(val uid: String, val menuId: String)
+	data class UserFavoriteDeleteRoute(val uid: String)
 	
 	@Location(GET_FAVORITE)
 	data class UserFavoriteGetRoute(val uid: String)

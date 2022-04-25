@@ -5,6 +5,7 @@ import com.pemweb.model.menu.MenuResponse
 import com.oreyo.model.review.ReviewBody
 import com.oreyo.model.step.StepBody
 import com.oreyo.model.user.UserResponse
+import com.pemweb.model.favorite.FavoriteBody
 import com.pemweb.model.login.LoginResponse
 import com.pemweb.model.menu.MenuBody
 import com.pemweb.model.menu.MenuLiteResponse
@@ -18,8 +19,8 @@ interface ICoofitRepository {
 	suspend fun isUserExist(username: String, password: String): Boolean //done
 	suspend fun getUserDetail(uid: String): UserResponse //done
 	suspend fun updateUser(uid: String, body: UserBody) //done
-	suspend fun addFavorite(uid: String, menuId: String)
-	suspend fun deleteFavorite(uid: String, menuId: String)
+	suspend fun addFavorite(uid: String, menuId: String) //done
+	suspend fun deleteFavorite(uid: String, menuId: String) //done
 	suspend fun getAllFavoritesByUser(uid: String): List<MenuLiteResponse>
 	suspend fun addNewMenu(body: MenuBody) //done
 	suspend fun addNewIngredient(menuId: String, body: IngredientBody) //done

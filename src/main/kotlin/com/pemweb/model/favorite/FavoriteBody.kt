@@ -1,4 +1,4 @@
-package com.oreyo.model.favorite
+package com.pemweb.model.favorite
 
 import com.google.gson.annotations.SerializedName
 

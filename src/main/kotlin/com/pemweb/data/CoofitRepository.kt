@@ -7,6 +7,7 @@ import com.oreyo.model.step.StepBody
 import com.pemweb.model.user.UserBody
 import com.pemweb.data.database.DatabaseFactory
 import com.pemweb.data.table.*
+import com.pemweb.model.favorite.FavoriteBody
 import com.pemweb.model.menu.MenuBody
 import com.pemweb.model.prediction.PredictionBody
 import com.pemweb.model.prediction.PredictionResponse
