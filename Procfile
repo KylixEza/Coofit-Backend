@@ -1,0 +1,1 @@
+web: build/install/coofit-backend/bin/coofit-backend

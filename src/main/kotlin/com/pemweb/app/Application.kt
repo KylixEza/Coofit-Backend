@@ -16,7 +16,7 @@ import org.koin.logger.slf4jLogger
 @InternalAPI
 @KtorExperimentalLocationsAPI
 fun main() {
-	embeddedServer(Netty, port = 8080, host = "localhost") {
+	embeddedServer(Netty, port = System.getenv("PORT").toInt(), host = "localhost") {
 		install(Koin) {
 			slf4jLogger(Level.ERROR)
 			modules(listOf(databaseModule, repositoryModule, controllerModule, routeModule))
