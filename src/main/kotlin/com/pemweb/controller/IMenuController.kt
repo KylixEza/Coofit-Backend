@@ -16,5 +16,5 @@ interface IMenuController {
 	suspend fun ApplicationCall.getAllMenus()
 	suspend fun ApplicationCall.getMenuDetail(menuId: String)
 	suspend fun ApplicationCall.searchMenu(query: String)
-	suspend fun ApplicationCall.getCaloriesPrediction(body: PredictionBody)
+	suspend fun ApplicationCall.getCaloriesPrediction(food: String)
 }

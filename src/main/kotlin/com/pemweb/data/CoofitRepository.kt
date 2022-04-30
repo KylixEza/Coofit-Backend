@@ -235,7 +235,7 @@ class CoofitRepository(
 			}
 	}
 	
-	override suspend fun getCaloriesPrediction(body: PredictionBody): PredictionResponse {
+	override suspend fun getCaloriesPrediction(food: String): PredictionResponse {
 		val menus = dbFactory.dbQuery {
 			MenuTable.selectAll().mapNotNull {
 				Mapper.mapRowToPredictResponse(it)
@@ -247,9 +247,9 @@ class CoofitRepository(
 			categorySelector = { it.calories }
 		)
 		
-		val predictResult = nbc.predictWithProbability(body.food.splitWords().toSet())
+		val predictResult = nbc.predictWithProbability(food.splitWords().toSet())
 		return PredictionResponse(
-			body.food,
+			food,
 			predictResult?.category ?: -1,
 			predictResult?.probability ?: -1.0
 		)

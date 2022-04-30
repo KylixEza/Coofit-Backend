@@ -30,5 +30,5 @@ interface ICoofitRepository {
 	suspend fun getAllMenus(): List<MenuLiteResponse> //done
 	suspend fun getMenuDetail(menuId: String): MenuResponse //done
 	suspend fun searchMenu(query: String): List<MenuLiteResponse> //done
-	suspend fun getCaloriesPrediction(body: PredictionBody): PredictionResponse
+	suspend fun getCaloriesPrediction(food: String): PredictionResponse //done
 }

@@ -22,7 +22,7 @@ sealed class MenuRouteLocation {
 		//GET
 		const val GET_MENU_DETAIL = BASE_SELECTED_MENU
 		//GET
-		const val GET_CALORIES_PREDICTION = "$BASE_MENU/prediction"
+		const val GET_CALORIES_PREDICTION = "$BASE_MENU/prediction/{food}"
 	}
 	
 	@Location(POST_MENU)
@@ -47,5 +47,5 @@ sealed class MenuRouteLocation {
 	data class MenuDetailGetRoute(val menuId: String)
 	
 	@Location(GET_CALORIES_PREDICTION)
-	class MenuCaloriesPredictionGetRoute
+	data class MenuCaloriesPredictionGetRoute(val food: String)
 }

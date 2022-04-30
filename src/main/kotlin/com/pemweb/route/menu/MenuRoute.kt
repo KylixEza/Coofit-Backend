@@ -127,14 +127,14 @@ class MenuRoute(
 	
 	private fun Route.getMenuCaloriesPrediction() {
 		get<MenuRouteLocation.MenuCaloriesPredictionGetRoute> {
-			val body = try {
-				call.receive<PredictionBody>()
+			val food = try {
+				call.parameters["food"]
 			} catch (e: Exception) {
 				call.generalException(e)
 				return@get
-			}
+			} ?: "null"
 			
-			controller.apply { call.getCaloriesPrediction(body) }
+			controller.apply { call.getCaloriesPrediction(food) }
 		}
 	}
 	

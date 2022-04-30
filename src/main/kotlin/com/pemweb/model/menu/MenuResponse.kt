@@ -1,11 +1,7 @@
 package com.pemweb.model.menu
 
 import com.google.gson.annotations.SerializedName
-import com.oreyo.model.ingredient.IngredientResponse
-import com.oreyo.model.review.ReviewRequest
 import com.oreyo.model.review.ReviewResponse
-import com.oreyo.model.step.StepResponse
-import java.math.BigDecimal
 
 data class MenuResponse(
 	
