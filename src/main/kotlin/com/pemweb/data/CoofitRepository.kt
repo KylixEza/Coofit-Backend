@@ -7,14 +7,12 @@ import com.oreyo.model.step.StepBody
 import com.pemweb.model.user.UserBody
 import com.pemweb.data.database.DatabaseFactory
 import com.pemweb.data.table.*
-import com.pemweb.model.favorite.FavoriteBody
+import com.pemweb.model.login.LoginResponse
 import com.pemweb.model.menu.MenuBody
-import com.pemweb.model.prediction.PredictionBody
 import com.pemweb.model.prediction.PredictionResponse
 import com.pemweb.util.Mapper
 import io.ktor.util.*
 import org.jetbrains.exposed.sql.*
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.nield.kotlinstatistics.toNaiveBayesClassifier
 import java.util.*
 
@@ -40,13 +38,20 @@ class CoofitRepository(
 	}
 	
 	override suspend fun getIdOfUser(username: String, password: String) = dbFactory.dbQuery {
-		UserTable.select {
+		val results = UserTable.select {
 			UserTable.username.eq(username) and UserTable.password.eq(password)
-		}.map {
-			val user = Mapper.mapRowToLoginResponse(it)
-			println(user)
-			user
-		}.first()
+		}.count()
+		
+		if (results == 0L)
+			return@dbQuery LoginResponse(isExist = false, uid = null)
+		else {
+			val uid = UserTable.select {
+				UserTable.username.eq(username) and UserTable.password.eq(password)
+			}.firstNotNullOf {
+				it[UserTable.uid]
+			}
+			return@dbQuery LoginResponse(isExist = true, uid)
+		}
 	}
 	
 	override suspend fun isUserExist(username: String, password: String) = dbFactory.dbQuery {

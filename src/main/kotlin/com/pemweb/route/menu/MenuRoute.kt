@@ -5,9 +5,7 @@ import com.oreyo.model.review.ReviewBody
 import com.oreyo.model.step.StepBody
 import com.pemweb.controller.IMenuController
 import com.pemweb.helper.ResponseModelHelper.generalException
-import com.pemweb.helper.ResponseModelHelper.generalListSuccess
 import com.pemweb.model.menu.MenuBody
-import com.pemweb.model.prediction.PredictionBody
 import io.ktor.application.*
 import io.ktor.locations.*
 import io.ktor.routing.*
@@ -127,14 +125,14 @@ class MenuRoute(
 	
 	private fun Route.getMenuCaloriesPrediction() {
 		get<MenuRouteLocation.MenuCaloriesPredictionGetRoute> {
-			val body = try {
-				call.receive<PredictionBody>()
+			val food = try {
+				call.request.queryParameters["food"]
 			} catch (e: Exception) {
 				call.generalException(e)
 				return@get
-			}
+			} ?: ""
 			
-			controller.apply { call.getCaloriesPrediction(body) }
+			controller.apply { call.getCaloriesPrediction(food) }
 		}
 	}
 	
